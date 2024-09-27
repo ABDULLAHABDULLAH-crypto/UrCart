@@ -24,6 +24,7 @@ const Tabslayout = () => {
     <>
       <Tabs
         screenOptions={{
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarActiveTintColor: "#FFA001",
           tabBarInactiveTintColor: "#CDCDE0",
@@ -50,21 +51,7 @@ const Tabslayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
-          name="search"                
-          options={{
-            title: "home",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                color={color}
-                focused={focused}
-                icon={icons.search}
-                name="Search"
-              />
-            ),
-          }}
-        />
+        
 
         <Tabs.Screen
           name="cart"
