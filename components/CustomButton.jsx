@@ -1,22 +1,19 @@
-import { View, Text, TouchableOpacity,Pressable } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-// className={`bg-primary rounded-xl min-h-[62px] justify-center items-center ${containerStyles}`}
-// disabled={isLoading}
-// onPress={handlePress}
-// activeOpacity={0.7}
+
 const CustomButton = ({
   handlePress,
   title,
-  containerStyles,
+  containerStyles, // Make sure this is a valid Tailwind class name or handle it separately
   textStyles,
   isLoading,
 }) => {
   return (
-    <TouchableOpacity  
-    className={`bg-primary rounded-lg min-h-[62px]  justify-center items-center ${containerStyles}`}
-    disabled={isLoading}
-    onPress={handlePress}
-    activeOpacity={0.7}
+    <TouchableOpacity
+      className={`bg-primary rounded-lg min-h-[62px] justify-center items-center ${containerStyles}`} // NativeWind Tailwind class
+      disabled={isLoading}
+      onPress={handlePress}
+      activeOpacity={0.7}
     >
       <Text className={`text-purple-50 ${textStyles}`}>{title}</Text>
     </TouchableOpacity>
