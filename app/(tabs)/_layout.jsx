@@ -41,6 +41,7 @@ const Tabslayout = () => {
           options={{
             title: "home",
             headerShown: false,
+            
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 color={color}
@@ -58,6 +59,7 @@ const Tabslayout = () => {
           options={{
             title: "Cart",
             headerShown: false,
+            
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 color={color}
