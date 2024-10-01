@@ -14,12 +14,13 @@ import { Link } from "expo-router";
 export default function Index() {
   return (
     <>
-      <StatusBar hidden />
       <ImageBackground
         source={require("../assets/images/onbording.png")} // Make sure this path is correct
         className="flex-1"
         resizeMode="cover" // Ensures the image covers the entire area while maintaining aspect ratio
       >
+      <StatusBar />
+
         <View
           style={{
             flex: 1,

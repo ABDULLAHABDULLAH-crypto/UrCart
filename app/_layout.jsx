@@ -34,8 +34,8 @@ export default function RootLayout() {
   //This useEffect will be update the fonts whenever there is a change in the font 
  
   return (
-    <Stack>
-    <Stack.Screen name="index" options={{headerShown:false,statusBarHidden:false}}/>
+    <Stack >
+    <Stack.Screen  name="index" options={{headerShown:false}}/>
     <Stack.Screen name="(tabs)" options={{headerShown:false}}/>
 
     </Stack>
