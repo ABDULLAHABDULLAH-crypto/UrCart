@@ -1,7 +1,8 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import React from "react";
 import { icons } from "../../constants";
+import SearchInput from "../../components/searchInput";
 
 const TabIcon = ({ icon, name, color, focused }) => {
   return (
@@ -22,9 +23,29 @@ const TabIcon = ({ icon, name, color, focused }) => {
 const Tabslayout = () => {
   return (
     <>
+
+      <View className="mt-5">
+      <View className="flex flex-row justify-between items mt-6 px-6 pt-6">
+        <TouchableOpacity>
+          <Image
+          source={require("../../assets/images/Group 4.png")}
+          resizeMode="cover"
+          className="h-3 w-6"
+          />
+        </TouchableOpacity>
+        
+        <TouchableOpacity>
+          <Image
+          source={require("../../assets/images/ShoppingCart.png")}
+          resizeMode="cover"
+          className="h-7 w-8"
+          />
+        </TouchableOpacity>
+      </View>
+      </View>
       <Tabs
         screenOptions={{
-          headerShown: false,
+          headerShown: true,
           tabBarShowLabel: false,
           tabBarActiveTintColor: "#FFA001",
           tabBarInactiveTintColor: "#CDCDE0",
@@ -71,7 +92,7 @@ const Tabslayout = () => {
           }}
         />
 
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="profile"
           options={{
             title: "profile",
@@ -85,7 +106,7 @@ const Tabslayout = () => {
               />
             ),
           }}
-        />
+        /> */}
       </Tabs>
     </>
   );

@@ -4,9 +4,9 @@ import { tw } from 'nativewind';
 
 const Category = ({ categoryName, imageSource }) => {
   return (
-    <View className="flex-1 w-28 items-center overflow-hidden mr-4 text-center rounded-lg ">
+    <View className=" w-24 items-center  mr-4 text-center rounded-lg m-3">
       {/* Category Image */}
-      <View className="w-28 h-28 rounded-lg overflow-hidden bg-gradient-to-r from-[#e0f7fa] to-[#e1bee7] shadow-md">
+      <View className="w-20 h-20  rounded-lg overflow-hidden bg-gradient-to-r from-[#e0f7fa] to-[#e1bee7] shadow-md">
         <Image
           className="w-full h-full"
           resizeMode="cover"
