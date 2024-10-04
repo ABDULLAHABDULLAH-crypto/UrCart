@@ -32,11 +32,12 @@ export default function RootLayout() {
   
 
   //This useEffect will be update the fonts whenever there is a change in the font 
- 
+    // We will use Global Context to fetch user data
   return (
-    <Stack >
+    <Stack className="bg-white">
     <Stack.Screen  name="index" options={{headerShown:false}}/>
     <Stack.Screen name="(tabs)" options={{headerShown:false}}/>
+    <Stack.Screen name="(auth)" options={{headerShown:false}}/>
 
     </Stack>
   );

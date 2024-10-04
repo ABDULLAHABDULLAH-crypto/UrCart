@@ -7,8 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchInput from "../../components/searchInput";
 import { Feather } from "@expo/vector-icons";
@@ -17,14 +18,16 @@ import Product from "../../components/Product";
 import Category from "../../components/Category";
 
 const home = () => {
+
+  
+
+
   return (
     <>
     <StatusBar barStyle="dark-content" />
-    <ScrollView className="mt-[-60px]">
+    <ScrollView className="mt-[-60px] bg-white">
     <SafeAreaView className="px-4 ">
       
-    
-
       <SearchInput />
   
         {/* //This View will for Last Search Items */}
@@ -40,6 +43,13 @@ const home = () => {
               description="Tomato By 1 Kg"
               price="SAR 6.99"
               imageSource={require("../../assets/images/Tomato.png")}
+              handleClick={
+                ()=>{
+                  Alert.alert("Succes",` has been Added`)
+                  
+                }
+
+              }
             />
             <Product
               description="Tomato By 1 Kg"
@@ -94,7 +104,6 @@ const home = () => {
           </ScrollView>
         </View>
       </SafeAreaView>
-  
     </ScrollView>
     </>
   
