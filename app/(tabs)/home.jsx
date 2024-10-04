@@ -89,7 +89,7 @@ const home = () => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleCategoryPress('Meat', meatData)} // Pass meatData here
+                onPress={() => handleCategoryPress('Meat')}
                 className="w-28 mb-4"
               >
                 <Category
