@@ -18,9 +18,8 @@ import Product from "../../components/Product";
 import Category from "../../components/Category";
 
 const home = () => {
-
+const [cartItems,setCartItems]=useState(0);
   
-
 
   return (
     <>

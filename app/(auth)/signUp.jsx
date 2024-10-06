@@ -4,13 +4,37 @@ import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FromField from "../../components/FromField";
 import CustomButton from "../../components/CustomButton";
+import { createUserWithEmailAndPassword,  } from "firebase/auth";
+import { auth,db } from "../../firebaseConfig";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore"; 
 
 const signup = () => {
-  const [user, setUser] = useState({
+  
+  // Here we will fetch the data from firebase
+  const [form, setForm] = useState({
     name: "",
     email: " ",
     password: " ",
+    confirmPassword:" ",
   });
+
+
+// Add a new document in collection "cities"
+
+
+  const handleSignUp= async () =>{
+    try{
+        const userCredential=await createUserWithEmailAndPassword(auth, form.email,form.password);
+        userCredential.user.displayName=form.name
+
+        router.push("/home");
+    }catch(error) {
+        console.error("Error signing in : ",error.message);
+        Alert.alert("Email or Password is wrong");
+      }
+    
+    }
+    
   return (
     <SafeAreaView className="bg-primary h-full p-4">
       <ScrollView>
@@ -37,37 +61,37 @@ const signup = () => {
 
           <FromField
             Title={"Name"}
-            value={user.name}
+            value={form.name}
             keyboardType={"text"}
-            handleChangeText={(e) => setUser({ ...user, name: e })}
+            handleChangeText={(e) => setForm({ ...form, name: e })}
             otherStyles="mt-7"
           />
           <FromField
             Title={"Email"}
-            value={user.email}
+            value={form.email}
             keyboardType={"email-address"}
-            handleChangeText={(e) => setUser({ ...user, email: e })}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
           />
           <FromField
             Title={"Passowrd"}
-            value={user.password}
+            value={form.password}
             keyboardType={"pass"}
-            handleChangeText={(e) => setUser({ ...user, password: e })}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
           <FromField
             Title={"Confirm Passowrd"}
-            value={user.password}
+            value={form.password}
             keyboardType={"pass"}
-            handleChangeText={(e) => setUser({ ...user, password: e })}
+            handleChangeText={(e) => setForm({ ...form, confirmPassword: e })}
             otherStyles="mt-7"
           />
 
           <CustomButton
             title="SignUp"
             containerStyles={"w-[300px] mt-36 "}
-            handlePress={() => {}}
+            handlePress={handleSignUp}
             isLoading=""
             textStyles=""
           />

@@ -1,19 +1,44 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FromField from "../../components/FromField";
 import CustomButton from "../../components/CustomButton";
 
+import {  signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+
 const signin = () => {
   // Here we will fetch the data from firebase
-  const [user, setUser] = useState({
+  const [form, setForm] = useState({
     email: " ",
     password: " ",
   });
+  const handleSignIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      console.log(userCredential.user);
+      router.push("/home");
+    } catch (error) {
+      console.error("Error signing in : ", error.message);
+      Alert.alert("Email or Password is wrong");
+    }
+  };
+
   return (
     <SafeAreaView className="bg-primary h-full p-4">
-      <ScrollView >
+      <ScrollView>
         <View className="mb-10 ">
           <TouchableOpacity
             onPress={() => {
@@ -37,50 +62,52 @@ const signin = () => {
 
           <FromField
             Title={"Email"}
-            value={user.email}
+            value={form.email}
             keyboardType={"email-address"}
-            handleChangeText={(e) => setUser({ ...user, email: e })}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
           />
           <FromField
             Title={"Passowrd"}
-            value={user.password}
+            value={form.password}
             keyboardType={"pass"}
-            handleChangeText={(e) => setUser({ ...user, password: e })}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
-          
-            <CustomButton
-              title="Login"
-              containerStyles={"w-[300px] mt-36 "}
-              handlePress={() => {}}
-              isLoading=""
-              textStyles=""
-            />
-             <View
-          href="/home"
-          style={{
-            color: "black",
-            fontSize: 12,
-            marginTop: 15,
-          }}
-        >
+          <CustomButton
+            title="Login"
+            containerStyles={"w-[300px] mt-36 "}
+            handlePress={handleSignIn}
+            isLoading=""
+            textStyles=""
+          />
+          <View
+            href="/home"
+            style={{
+              color: "black",
+              fontSize: 12,
+              marginTop: 15,
+            }}
+          >
             <Text>
-            Don't have an account? <Link className="text-[#3DB8DF]" href="/signUp">SIGN UP</Link>
+              Don't have an account?{" "}
+              <Link className="text-secondary-100" href="/signUp">
+                SIGN UP
+              </Link>
             </Text>
-        </View>
+          </View>
           <Link
-          href="/home"
-          style={{
-            color: "#686868",
-            fontSize: 12,
-            textDecorationLine: "underline",
-            marginTop: 15,
-          }}
-        >
-          Skip
-        </Link>
+            href="/home"
+            style={{
+              color: "#686868",
+              fontSize: 12,
+              textDecorationLine: "underline",
+              marginTop: 15,
+            }}
+          >
+            Skip
+          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
