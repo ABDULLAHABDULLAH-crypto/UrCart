@@ -4,37 +4,38 @@ import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FromField from "../../components/FromField";
 import CustomButton from "../../components/CustomButton";
-import { createUserWithEmailAndPassword,  } from "firebase/auth";
-import { auth,db } from "../../firebaseConfig";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore"; 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebaseConfig";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 const signup = () => {
-  
   // Here we will fetch the data from firebase
   const [form, setForm] = useState({
     name: "",
     email: " ",
     password: " ",
-    confirmPassword:" ",
+    confirmPassword: " ",
   });
 
+  // Add a new document in collection "cities"
 
-// Add a new document in collection "cities"
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      
+      userCredential.user.displayName = form.name;
 
-
-  const handleSignUp= async () =>{
-    try{
-        const userCredential=await createUserWithEmailAndPassword(auth, form.email,form.password);
-        userCredential.user.displayName=form.name
-
-        router.push("/home");
-    }catch(error) {
-        console.error("Error signing in : ",error.message);
-        Alert.alert("Email or Password is wrong");
-      }
-    
+      router.push("/home");
+    } catch (error) {
+      console.error("Error signing in : ", error.message);
+      Alert.alert("Email or Password is wrong");
     }
-    
+  };
+
   return (
     <SafeAreaView className="bg-primary h-full p-4">
       <ScrollView>
