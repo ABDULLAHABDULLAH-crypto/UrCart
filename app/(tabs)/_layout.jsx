@@ -24,9 +24,9 @@ const Tabslayout = () => {
   return (
     <>
 
-      <View className="mt-5">
-      <View className="flex flex-row justify-between items mt-6 px-6 pt-6">
-        <TouchableOpacity>
+      <View className=" bg-white">
+      <View className="flex flex-row justify-between items-center mt-10 px-6 py-6">
+        <TouchableOpacity onPress={{}}>
           <Image
           source={require("../../assets/images/Group 4.png")}
           resizeMode="cover"
@@ -34,7 +34,7 @@ const Tabslayout = () => {
           />
         </TouchableOpacity>
         
-        <TouchableOpacity>
+        <TouchableOpacity onPress={{}}>
           <Image
           source={require("../../assets/images/ShoppingCart.png")}
           resizeMode="cover"
@@ -58,7 +58,7 @@ const Tabslayout = () => {
         }}
       >
         <Tabs.Screen
-          name="home"
+          name="(home)"
           options={{
             title: "home",
             headerShown: false,
