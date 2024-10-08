@@ -2,7 +2,7 @@ import {
   View,
   Text,
   ScrollView,
-  StatusBar,
+  
   Alert,
   TouchableOpacity,
   StatusBar,
@@ -34,7 +34,7 @@ const home = () => {
             <Product
               description="Tomato By 1 Kg"
               price="SAR 6.99"
-              imageSource={require("../../assets/images/Tomato.png")}
+              imageSource={require("../../../assets/images/Tomato.png")}
             />
             <Product
               description="Tomato By 1 Kg"

@@ -14,11 +14,7 @@ const Product = ({ price, description, imageSource,handleClick }) => {
         <View
           className={`absolute top-14 left-14 bg-white flex-row p-1.5 rounded shadow-md`}
         >
-<<<<<<< HEAD
-          <TouchableOpacity onPress={{}}>
-=======
           <TouchableOpacity onPress={handleClick}>
->>>>>>> 2f45026838199d08e5d682963cd68ec148b40ffa
             <Image
               className={`w-6 h-6`}
               resizeMode="cover"
