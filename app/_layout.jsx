@@ -37,7 +37,12 @@ export default function RootLayout() {
     <Stack className="bg-white">
     <Stack.Screen  name="index" options={{headerShown:false}}/>
     <Stack.Screen name="(tabs)" options={{headerShown:false}}/>
+<<<<<<< HEAD
     <Stack.Screen name="(screens)" options={{headerShown:false}}/>
+=======
+    <Stack.Screen name="(auth)" options={{headerShown:false}}/>
+
+>>>>>>> 2f45026838199d08e5d682963cd68ec148b40ffa
     </Stack>
   );
 }

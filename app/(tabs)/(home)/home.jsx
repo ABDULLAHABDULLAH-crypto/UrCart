@@ -5,8 +5,9 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchInput from "../../../components/searchInput";
 import Product from "../../../components/Product";
@@ -14,8 +15,6 @@ import Category from "../../../components/Category";
 import { Link, router, useNavigation } from "expo-router";
 
 const home = () => {
-  
-
   return (
     <>
     <StatusBar barStyle="dark-content" />
@@ -35,12 +34,7 @@ const home = () => {
             <Product
               description="Tomato By 1 Kg"
               price="SAR 6.99"
-              imageSource={require("../../../assets/images/Tomato.png")}
-              handleClick={
-                ()=>{
-                  Alert.alert("Succes",` has been Added`)
-                }
-              }
+              imageSource={require("../../assets/images/Tomato.png")}
             />
             <Product
               description="Tomato By 1 Kg"

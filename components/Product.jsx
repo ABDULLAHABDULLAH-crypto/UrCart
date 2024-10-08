@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 
-const Product = ({ price, description, imageSource }) => {
+const Product = ({ price, description, imageSource,handleClick }) => {
   return (
     <View className={`flex-1 w-full overflow-hidden mr-4`}>
       <View className={`h-24 w-24 relative`}>
@@ -14,7 +14,11 @@ const Product = ({ price, description, imageSource }) => {
         <View
           className={`absolute top-14 left-14 bg-white flex-row p-1.5 rounded shadow-md`}
         >
+<<<<<<< HEAD
           <TouchableOpacity onPress={{}}>
+=======
+          <TouchableOpacity onPress={handleClick}>
+>>>>>>> 2f45026838199d08e5d682963cd68ec148b40ffa
             <Image
               className={`w-6 h-6`}
               resizeMode="cover"
@@ -28,6 +32,7 @@ const Product = ({ price, description, imageSource }) => {
           className={`absolute top-4.5 left-3.5 w-19 h-16.5`}
           resizeMode="cover"
           source={imageSource}
+
         />
       </View>
 
