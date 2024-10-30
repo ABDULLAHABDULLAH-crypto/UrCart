@@ -12,13 +12,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SearchInput from "../../../components/searchInput";
 import Product from "../../../components/Product";
 import Category from "../../../components/Category";
-import { Link, router, useNavigation } from "expo-router";
+import { Link, router, useNavigation, useRouter } from "expo-router";
+import { useGlobalContext } from "../../../Context/GlobalContext";
+import { useRoute } from "@react-navigation/native";
 
 const home = () => {
+
+  const {cartCount,increaseCart}=useGlobalContext();
+
+  
   return (
     <>
     <StatusBar barStyle="dark-content" />
-    <ScrollView className="mt-[-60px] bg-white">
+    <ScrollView className="mt-[-60px] bg-slate-100">
     <SafeAreaView className="px-4 ">
       
       <SearchInput />
@@ -32,28 +38,33 @@ const home = () => {
             className="flex-row  w-full "
           >
             <Product
-              description="Tomato By 1 Kg"
-              price="SAR 6.99"
+              description="Tomato "
+              price=" 6.99"
+              imageSource={require("../../../assets/images/Tomato.png")}
+              handleClick={increaseCart}
+            />
+            <Product
+              description="Tomato "
+              price=" 6.99"
+              imageSource={require("../../../assets/images/Tomato.png")}
+              handleClick={increaseCart}
+
+            />
+            <Product
+              description="Tomato "
+              price="  6.99"
+              imageSource={require("../../../assets/images/Tomato.png")}
+              handleClick={increaseCart}
+
+            />
+            <Product
+              description="Tomato "
+              price="  6.99"
               imageSource={require("../../../assets/images/Tomato.png")}
             />
             <Product
-              description="Tomato By 1 Kg"
-              price="SAR 6.99"
-              imageSource={require("../../../assets/images/Tomato.png")}
-            />
-            <Product
-              description="Tomato By 1 Kg"
-              price="SAR 6.99"
-              imageSource={require("../../../assets/images/Tomato.png")}
-            />
-            <Product
-              description="Tomato By 1 Kg"
-              price="SAR 6.99"
-              imageSource={require("../../../assets/images/Tomato.png")}
-            />
-            <Product
-              description="Tomato By 1 Kg"
-              price="SAR 6.99"
+              description="Tomato "
+              price="  6.99"
               imageSource={require("../../../assets/images/Tomato.png")}
             />
           </ScrollView>
