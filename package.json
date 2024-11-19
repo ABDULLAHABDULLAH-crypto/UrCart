@@ -17,13 +17,17 @@
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-firebase/app": "^21.0.0",
     "@react-native-firebase/auth": "^21.0.0",
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/native": "^6.0.2",
     "@ui-kitten/components": "^5.3.1",
     "expo": "~51.0.34",
+    "expo-application": "~5.9.1",
+    "expo-auth-session": "~5.5.2",
     "expo-constants": "~16.0.2",
+    "expo-crypto": "~13.0.2",
     "expo-dev-client": "~4.0.27",
     "expo-font": "~12.0.9",
     "expo-linking": "~6.3.1",
@@ -33,6 +37,7 @@
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
     "firebase": "^10.14.0",
+    "fuse.js": "^7.0.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -43,10 +48,7 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "^15.7.1",
     "react-native-web": "~0.19.10",
-    "expo-auth-session": "~5.5.2",
-    "expo-crypto": "~13.0.2",
-    "expo-application": "~5.9.1",
-    "@react-native-async-storage/async-storage": "1.23.1"
+    "urcart": "file:"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
