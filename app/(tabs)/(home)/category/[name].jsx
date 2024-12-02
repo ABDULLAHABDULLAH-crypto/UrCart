@@ -7,6 +7,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const CategoryPage = () => {
   const { categoryName } = useLocalSearchParams();
+  console.log("Category Name ",categoryName);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   function findLowestPrice(storePrices) {
@@ -25,22 +26,25 @@ const CategoryPage = () => {
   }
   useEffect(() => {
     async function fetchProducts() {
+      setLoading(true);
       try {
         const productsRef = collection(db, "Products");
-        const q = query(productsRef, where("category", ">=", categoryName));
+        const q = query(productsRef, where("category", "==", categoryName));
         const querySnapshot = await getDocs(q);
         const fetchedProducts = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-
-        setProducts(fetchedProducts);
-        setLoading(false);
+  
+        // console.log("Fetched Products:", fetchedProducts); // Log to see the fetched data
+        setProducts(fetchedProducts); // Assuming you have a state setter like this
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
       }
     }
-
+  
     fetchProducts();
   }, [categoryName]);
   console.log("Cart Items",products);
