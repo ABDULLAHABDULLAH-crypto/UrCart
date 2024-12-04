@@ -7,15 +7,15 @@ import React from "react";
 import { icons } from "../../constants";
 import SearchInput from "../../components/searchInput";
 import { useGlobalContext } from "../../Context/GlobalContext";
-
-const TabIcon = ({ icon, name, color, focused }) => {
+import { ShoppingCart as ShoppingCartIcon } from '@expo/vector-icons';
+const TabIcon = ({ icon, name, color, focused ,imageStyle }) => {
   return (
-    <View className="flex-1 justify-center items-center w-20 h-full m-2">
+    <View className="flex-1 justify-center items-center w-20 h-full ">
     <Image
       source={icon}
       resizeMode="contain"
       tintColor={color}
-      className="w-10 h-8 mt-4"
+      className={imageStyle + " w-10 h-10 mt-10"}
     />
     <Text
       className={`${focused ? "font-psemibold" : "font-pregular"}`}
@@ -31,30 +31,8 @@ const Tabslayout = () => {
   const { cartCount } = useGlobalContext();
   return (
     <>
-      <View className=" bg-slate-100 px-6">
-        <View className="flex flex-row justify-between items-center mt-10 px-6 py-6">
-          <TouchableOpacity onPress={{}}>
-            <Image
-              source={require("../../assets/images/Group 4.png")}
-              resizeMode="cover"
-              className="h-3 w-6"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={{}}>
-            <Image
-              source={require("../../assets/images/ShoppingCart.png")}
-              resizeMode="cover"
-              className="h-7 w-8"
-            />
-            {cartCount>0?<View className="absolute bottom-5 left-3 bg-primary rounded-3xl w-7 h-7 align-middle">
-              <Text className="text-cyan-50 font-pmedium p-[3px]">  {cartCount} </Text>
-            </View>:""}
-          </TouchableOpacity>
-
-        </View>
-        <SearchInput/>
-
-      </View>
+    
+      <View className="h-24 bg-primary"></View>
 
       <Tabs
         screenOptions={{
@@ -63,10 +41,11 @@ const Tabslayout = () => {
           tabBarActiveTintColor: "#FFA001",
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarStyle: {
-            backgroundColor: "#20374F",
-            borderTopWidth: 1,
-            borderTopColor: "#232533",
+            backgroundColor: "#20374F", // Light background color for floating effect
+            borderTopWidth: 0, // Remove default top border
+            borderRadius: 20, // Rounded corners
             height: 84,
+           
           },
         }}
       >
@@ -97,28 +76,14 @@ const Tabslayout = () => {
               <TabIcon
                 color={color}
                 focused={focused}
-                icon={icons.bookmark}
+                icon={icons.ShoppingCart}
                 name="Cart"
+                imageStyle={"w-28"}
               />
             ),
           }}
         />
 
-        {/* <Tabs.Screen
-          name="profile"
-          options={{
-            title: "profile",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                color={color}
-                focused={focused}
-                icon={icons.profile}
-                name="Profile"
-              />
-            ),
-          }}
-        /> */}
       </Tabs>
     </>
   );

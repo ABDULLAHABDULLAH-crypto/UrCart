@@ -13,17 +13,17 @@ import {
 } from "firebase/firestore"; // Added arrayUnion for cart
 import { useGlobalContext } from "../Context/GlobalContext";
 import { ProductData } from "../Data/ProductData";
-const Product = ({ name, price, description, image }) => {
+const Product = ({ name, price, descreption, image }) => {
   const { userId } = useGlobalContext(); // Access userId from context
   const { cart, cartCount, increaseCart, addItemToCart } = useGlobalContext();
   // Create a product object to be added
   const product = {
     name: name,
-    description: description,
+    descreption: descreption,
     price: price,
     image: image,
   };
-
+  
   // Add product to user's cart in Firestore
   const AddProduct = async () => {
     try {
@@ -46,7 +46,7 @@ const Product = ({ name, price, description, image }) => {
       });
 
       if (productData) {
-        // console.log("Product data retrieved: ", productData);
+        console.log("Product data retrieved: ", productData);
         addItemToCart(productData); // Add the complete product data to the cart
       } else {
         console.log("No product found with name:", product.name);
@@ -56,14 +56,14 @@ const Product = ({ name, price, description, image }) => {
     }
   };
 
-  
+  console.log(descreption);
   const handleClickForProduct = () => {
     router.push({
       pathname: "ProductPage",
       params: {
         name: name,
         price: price,
-        description: description,
+        description: descreption,
         imageSource: image,
       },
     });

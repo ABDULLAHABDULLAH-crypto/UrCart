@@ -53,7 +53,7 @@ const SignIn = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full p-4">
-      <ScrollView>
+      <ScrollView className="">
         <View className="mb-10 ">
           <TouchableOpacity
             onPress={() => {
@@ -82,7 +82,7 @@ const SignIn = () => {
             otherStyles="mt-7"
           />
           <FromField
-            Title={"Password"}
+            Title={"Passowrd"}
             value={form.password}
             keyboardType={"default"}
             handleChangeText={(e) => setForm({ ...form, password: e })}

@@ -6,7 +6,7 @@ import { db } from "../../../firebaseConfig";
 import { useGlobalContext } from "../../../Context/GlobalContext";
 
 const Product = () => {
-  const { name,price, description, imageSource } = useLocalSearchParams();
+  const { name,price, descreption, imageSource } = useLocalSearchParams();
   const [quantity, setQuantity] = useState(1);
   const { userId, cart, increaseCart,removeItemFromCart,addItemToCart } = useGlobalContext();
   
@@ -54,18 +54,20 @@ const Product = () => {
           className="w-96 h-96"
         />
       </View>
-
-      <View className="flex flex-row p-5 justify-between">
-        <Text className="text-3xl text-slate-500">SAR</Text>
-        <Text className="text-3xl text-slate-500">{price}</Text>
-      </View>
-
       <View className="p-5">
-        <Text className="text-2xl text-slate-500">{description}</Text>
+        <Text className="text-3xl text-slate-500">{name}</Text>
+        <Text className="text-1xl text-slate-500 py-2"> {descreption}</Text>
+
       </View>
+      <View className="flex flex-row p-5 justify-between">
+        <Text className="text-3xl text-slate-500">Price Start From </Text>
+        <Text className="text-3xl text-green-600">SAR {price}</Text>
+      </View>
+
+     
 
       <View>
-        <View className="flex justify-center items-center flex-row mt-12">
+        <View className="flex justify-center items-center flex-row mt-8">
           <View className="flex flex-row border rounded-3xl justify-center w-48 p-3">
             <TouchableOpacity onPress={decQuantity}>
               <Image

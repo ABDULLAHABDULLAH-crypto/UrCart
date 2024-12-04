@@ -12,7 +12,6 @@ export const GlobalProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
 
-<<<<<<< HEAD
   // Function to add an item to the cart
   const addItemToCart = (product,number=1) => {
     setCart((prevCartItems) => {
@@ -63,40 +62,19 @@ export const GlobalProvider = ({ children }) => {
 
 };
 
-=======
->>>>>>> 9a9f52fedec6ea5ac4ee8016cab3066bce031373
   const AddToCart = ({ Product }) => {
     setCart((prevProduct) => prevProduct + Product);
   };
 
-<<<<<<< HEAD
   const increaseCart = ( count = 1) => {
-=======
-  const increaseCart = ({ count = 1 }) => {
->>>>>>> 9a9f52fedec6ea5ac4ee8016cab3066bce031373
     setCartCount((prevCount) => prevCount + count);
   };
 
   // Function to decrease the cart count
-<<<<<<< HEAD
   const decreaseCart = ( count = 1 ) => {
     setCartCount((prevCount) => (prevCount > 0 ? prevCount - count : 0));
   };
   // Function to add an item to the cart
-=======
-  const decreaseCart = ({ count = 1 }) => {
-    setCartCount((prevCount) => (prevCount > 0 ? prevCount - count : 0));
-  };
-  // Function to add an item to the cart
-  const addItemToCart = (item) => {
-    setCart((prevCart) => [...prevCart, item]);
-  };
-
-  // Function to remove an item from the cart
-  const removeItemFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
->>>>>>> 9a9f52fedec6ea5ac4ee8016cab3066bce031373
 
   // Function to clear the cart
   const clearCart = () => {
@@ -108,14 +86,9 @@ export const GlobalProvider = ({ children }) => {
       value={{
         userId,
         setUserId,
-<<<<<<< HEAD
 
         cart,
         setCart,
-=======
-        
-        cart,
->>>>>>> 9a9f52fedec6ea5ac4ee8016cab3066bce031373
         addItemToCart,
         removeItemFromCart,
         clearCart,

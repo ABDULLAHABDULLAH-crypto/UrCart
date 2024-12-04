@@ -1,11 +1,15 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView } from 'react-native'
 import React from 'react'
+import { useLocalSearchParams } from 'expo-router'
 
 const Query = () => {
+  const {query }=useLocalSearchParams();
+ 
+
   return (
-    <View>
-      <Text>Query</Text>
-    </View>
+    <SafeAreaView className='h-full'>
+      <Text>{query}</Text>
+    </SafeAreaView>
   )
 }
 
