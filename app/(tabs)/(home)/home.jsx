@@ -17,21 +17,28 @@ import { db } from "../../../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 
 const Home = () => {
-  const { cartCount } = useGlobalContext();
+  const { cartCount,cart } = useGlobalContext();
   const [products, setProducts] = useState([]);
 
   function findLowestPrice(storePrices) {
-    return Math.min(...Object.values(storePrices || {}));
+    // console.log("Inside function ",storePrices.carrefour.price);
+    return Math.min(storePrices.carrefour.price,storePrices.danube.price,storePrices.tamimi.price);
+  }
+  function imageFromSupermarket(storePrices) {
+    // console.log("Inside function ",storePrices.carrefour.price);
+    return storePrices.carrefour.productImageLink;
   }
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "Products"));
+        const querySnapshot = await getDocs(collection(db, "Products2.0"));
         const productArray = [];
         querySnapshot.forEach((doc) => {
-          productArray.push({ ...doc.data(), id: doc.id });
+          productArray.push({ ...doc.data(), id: doc.id, });
+          
         });
+
         setProducts(productArray);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -39,10 +46,9 @@ const Home = () => {
     };
     fetchProducts();
   }, []);
-
+  // console.log(products)
   const renderHeader = () => (
     <>
-     
       {/* Banner */}
       <View className="w-full  p-4 border-collapse rounded-3xl">
         <View className="flex-row bg-primary h-52 border-collapse rounded-3xl items-center p-4">
@@ -58,7 +64,7 @@ const Home = () => {
       </View>
     </>
   );
-
+  
   const renderLastSearched = () => (
     <View className="px-4">
       <Text className="font-pregular my-5">Last Searched</Text>
@@ -70,9 +76,10 @@ const Home = () => {
         renderItem={({ item }) => (
           <Product
             name={item.name}
-            price={findLowestPrice(item.price)}
-            image={item.imageSource}
+            price={findLowestPrice(item.stores)}
+            image={imageFromSupermarket(item.stores)}
             description={item.description}
+            quantity={item.quantity??0}
           />
         )}
       />
@@ -86,19 +93,19 @@ const Home = () => {
         data={[
           {
             name: "Beverages & Water",
-            img: require("../../../assets/images/beverages 1.png"),
+            img: require("../../../assets/images/A glass of juice with different juices on a wooden table..png"),
           },
           {
             name: "Meets",
             img: require("../../../assets/images/meats 1.png"),
           },
           {
-            name: "Dairy & Eggs",
+            name: "Dairy",
             img: require("../../../assets/images/Eggs.png"),
           },
           {
             name: "Fruit & Veg",
-            img: require("../../../assets/images/1.png"),
+            img: require("../../../assets/images/Vegetables with pepper inside a bowl (2).png"),
           },
           {
             name: "Bakery",
@@ -111,6 +118,7 @@ const Home = () => {
           <Category
             categoryName={item.name}
             imageSource={item.img}
+            className="w-1/2"
             onPress={() =>
               router.push({
                 pathname: `/category/${item.name}`,
@@ -124,10 +132,10 @@ const Home = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1,paddingTop: 0,marginTop:-70, }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 0, marginTop: -70 }}>
       {/* <StatusBar /> */}
-       {/* Search Bar */}
-       <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl">
+      {/* Search Bar */}
+      <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl">
         <SearchInput />
         <TouchableOpacity onPress={{}} className="px-6">
           <Image
@@ -136,10 +144,8 @@ const Home = () => {
             className="h-10 w-8"
           />
           {cartCount > 0 && (
-            <View className="absolute bottom-5 left-3 bg-white rounded-3xl w-7 h-7 align-middle">
-              <Text className="text-black font-pmedium p-[3px]">
-                {cartCount}
-              </Text>
+            <View className="absolute bottom-5 left-3 bg-white rounded-3xl w-7 h-7 items-center justify-center">
+              <Text className="text-black font-pmedium">{cartCount}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -147,7 +153,6 @@ const Home = () => {
 
       <FlatList
         ListHeaderComponent={renderHeader}
-        
         data={[{ key: "lastSearched" }, { key: "categories" }]}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => {

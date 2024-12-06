@@ -1,41 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, SafeAreaView, StyleSheet } from 'react-native';
-import Product from '../../../../components/Product'; // Ensure this path is correct
-import { useLocalSearchParams } from 'expo-router'; // Verify this hook's usage or replace with another if not applicable
-import { db } from '../../../../firebaseConfig';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, SafeAreaView, StyleSheet } from "react-native";
+import Product from "../../../../components/Product"; // Ensure this path is correct
+import { useLocalSearchParams } from "expo-router"; // Verify this hook's usage or replace with another if not applicable
+import { db } from "../../../../firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const CategoryPage = () => {
   const { categoryName } = useLocalSearchParams();
-  console.log("Category Name ",categoryName);
+  console.log("Category Name ", categoryName);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
   function findLowestPrice(storePrices) {
-    let lowestPrice = Infinity;
-  
-    // Loop through each value in the storePrices object
-    for (const store in storePrices) {
-      const price = storePrices[store];
-      // Update the lowestPrice if the current price is lower
-      if (price < lowestPrice) {
-        lowestPrice = price;
-      }
-    }
-  
-    return lowestPrice;
+    // console.log("Inside function ",storePrices.carrefour.price);
+    return Math.min(storePrices.carrefour.price,storePrices.danube.price,storePrices.tamimi.price);
   }
+  function imageFromSupermarket(storePrices) {
+    // console.log("Inside function ",storePrices.carrefour.price);
+    return storePrices.carrefour.productImageLink;
+  }
+
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const productsRef = collection(db, "Products");
+        const productsRef = collection(db, "Products2.0");
         const q = query(productsRef, where("category", "==", categoryName));
         const querySnapshot = await getDocs(q);
-        const fetchedProducts = querySnapshot.docs.map(doc => ({
+        const fetchedProducts = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
-  
+
         // console.log("Fetched Products:", fetchedProducts); // Log to see the fetched data
         setProducts(fetchedProducts); // Assuming you have a state setter like this
       } catch (error) {
@@ -44,29 +40,31 @@ const CategoryPage = () => {
         setLoading(false);
       }
     }
-  
+    console.log("Cart Items", products);
+
     fetchProducts();
   }, [categoryName]);
-  console.log("Cart Items",products);
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
         <FlatList
-          numColumns={3}
           data={products}
+          numColumns={2}
+          keyExtractor={(item, index) => index.toString()} // Ensure unique keys
+          contentContainerStyle={styles.listContent} // Add padding/margin for the list
+          columnWrapperStyle={styles.columnWrapper} // Manage spacing between columns
           renderItem={({ item }) => (
-            <View style={styles.item}>
+            <View style={{padding:10 , marginLeft:-5}}>
               <Product
-                price={findLowestPrice(item.price)}
+                price={findLowestPrice(item.stores)}
                 name={item.name}
                 description={item.description}
-                imageSource={item.imageSource}
+                image={imageFromSupermarket(item.stores)}
               />
             </View>
           )}
-          keyExtractor={item => item.id}
         />
       )}
     </SafeAreaView>
@@ -76,12 +74,16 @@ const CategoryPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10, // Apply padding to the entire safe area
+    paddingHorizontal: 1, // Add padding to the SafeAreaView
+    backgroundColor: "#f8f9fa", // Optional background color
   },
-  item: {
-    width: 120, // Define width to accommodate 3 columns
-    padding: 10, // Padding around each item
-  }
+  listContent: {
+    paddingBottom: 10, // Add padding at the bottom of the FlatList
+  },
+  columnWrapper: {
+    marginBottom: 10, // Add vertical spacing between rows
+  },
+
 });
 
 export default CategoryPage;

@@ -6,10 +6,11 @@ import { db } from "../../../firebaseConfig";
 import { useGlobalContext } from "../../../Context/GlobalContext";
 
 const Product = () => {
-  const { name,price, descreption, imageSource } = useLocalSearchParams();
+  const { name, price, descreption, imageSource } = useLocalSearchParams();
   const [quantity, setQuantity] = useState(1);
-  const { userId, cart, increaseCart,removeItemFromCart,addItemToCart } = useGlobalContext();
-  
+  const { userId, cart, increaseCart, removeItemFromCart, addItemToCart } =
+    useGlobalContext();
+
   const AddProduct = async () => {
     try {
       if (!userId) {
@@ -32,8 +33,8 @@ const Product = () => {
 
       if (productData) {
         console.log("Product data retrieved: ", productData);
-        console.log("Quantity From Product Page",quantity);
-        addItemToCart(productData,quantity); // Add the complete product data to the cart
+        console.log("Quantity From Product Page", quantity);
+        addItemToCart(productData, quantity); // Add the complete product data to the cart
       } else {
         console.log("No product found with name:", name);
       }
@@ -57,14 +58,11 @@ const Product = () => {
       <View className="p-5">
         <Text className="text-3xl text-slate-500">{name}</Text>
         <Text className="text-1xl text-slate-500 py-2"> {descreption}</Text>
-
       </View>
       <View className="flex flex-row p-5 justify-between">
         <Text className="text-3xl text-slate-500">Price Start From </Text>
         <Text className="text-3xl text-green-600">SAR {price}</Text>
       </View>
-
-     
 
       <View>
         <View className="flex justify-center items-center flex-row mt-8">

@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore"; // Added arrayUnion for cart
 import { useGlobalContext } from "../Context/GlobalContext";
 import { ProductData } from "../Data/ProductData";
-const Product = ({ name, price, descreption, image }) => {
+const Product = ({ name, price, descreption, image,quantity }) => {
   const { userId } = useGlobalContext(); // Access userId from context
   const { cart, cartCount, increaseCart, addItemToCart } = useGlobalContext();
   // Create a product object to be added
@@ -22,8 +22,9 @@ const Product = ({ name, price, descreption, image }) => {
     descreption: descreption,
     price: price,
     image: image,
+    quantity:quantity
   };
-  
+
   // Add product to user's cart in Firestore
   const AddProduct = async () => {
     try {
@@ -36,7 +37,7 @@ const Product = ({ name, price, descreption, image }) => {
       const userRef = doc(db, "users", userId);
 
       // Fetching the product based on its name
-      const productsRef = collection(db, "Products");
+      const productsRef = collection(db, "Products2.0");
       const q = query(productsRef, where("name", "==", product.name));
       const querySnapshot = await getDocs(q);
       let productData = null; // Variable to store the complete product data
@@ -46,7 +47,7 @@ const Product = ({ name, price, descreption, image }) => {
       });
 
       if (productData) {
-        console.log("Product data retrieved: ", productData);
+        // console.log("Product data retrieved: ", productData);
         addItemToCart(productData); // Add the complete product data to the cart
       } else {
         console.log("No product found with name:", product.name);
@@ -56,7 +57,7 @@ const Product = ({ name, price, descreption, image }) => {
     }
   };
 
-  console.log(descreption);
+  
   const handleClickForProduct = () => {
     router.push({
       pathname: "ProductPage",
@@ -65,52 +66,50 @@ const Product = ({ name, price, descreption, image }) => {
         price: price,
         description: descreption,
         imageSource: image,
+        quantity:quantity
       },
     });
   };
   return (
-    <View className={`flex-1 w-full overflow-hidden mr-4`}>
-      <View className={`h-24 w-24 relative`}>
-        {/* Background */}
-        <View
-          className={`absolute top-0 left-0 h-24 w-24 rounded-lg bg-[#f7f7f7]`}
-        />
+    <View
+      className={`flex-1 w-full overflow-hidden ml-2  border border-slate-400 rounded-md items-center shadow-white`}
+    >
+      {/* Product Image Section */}
+      <View className={`h-28 w-full relative`}>
+        {/* Background Decoration */}
+        <View className={`absolute top-0 left-0 h-24 w-24 rounded-lg`} />
 
-        {/* Add Item Button */}
-        <View
-          className={`absolute top-14 left-14 bg-white flex-row p-1.5 rounded shadow-md`}
-        >
-          <TouchableOpacity onPress={AddProduct}>
-            <Image
-              className={`w-6 h-6`}
-              resizeMode="cover"
-              source={require("../assets/images/add.png")}
-            />
-          </TouchableOpacity>
-        </View>
         {/* Product Icon */}
         <TouchableOpacity onPress={handleClickForProduct}>
           <Image
-            className={`w-14 h-16 mx-4`}
+            className={`w-[80%] h-20 mx-4`}
             resizeMode="cover"
             source={{ uri: image }}
           />
         </TouchableOpacity>
       </View>
 
-      {/* Description */}
-      <View className={`mt-[-1.25] gap-2`}>
-        <Text className="text-[#262626] font-plight text-[11px] text-left w-25">
+      {/* Product Description */}
+      <View className={`m-2 gap-2`}>
+        <Text className="text-[#262626] font-light text-[11px] text-left w-25">
           {name}
         </Text>
         <Text className={`text-left w-25`}>
-          <Text
-            className={`font-dmSansMedium text-[12px] text-[#000] font-medium`}
-          >
-            The Lowest Price SAR {price}
+          <Text className={`font-medium text-[12px] text-[#000]`}>
+            Start Prices {price} SAR
           </Text>
         </Text>
       </View>
+
+      {/* Add to Cart Button */}
+      
+      <TouchableOpacity onPress={AddProduct}>
+        <View
+          className={`bg-primary m-4 border-2 border-primary flex-row rounded-xl shadow-sm h-10 w-24 items-center justify-center`}
+        >
+          <Text className="text-white text-xs">Add to Cart</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

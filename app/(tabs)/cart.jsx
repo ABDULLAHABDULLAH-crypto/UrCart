@@ -16,18 +16,34 @@ import { db } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
 const Cart = () => {
-  const { cart, removeItemFromCart, addItemToCart, setCart,decreaseCart } =
+  const { cart, removeItemFromCart, addItemToCart, setCart, decreaseCart } =
     useGlobalContext();
   const [cartItems, setCartItems] = useState([]);
   const [animatedValue] = useState(new Animated.Value(1));
 
+  function findLowestPrice(storePrices) {
+    // console.log("Inside function ",storePrices.carrefour.price);
+    return Math.min(
+      storePrices.carrefour.price,
+      storePrices.danube.price,
+      storePrices.tamimi.price
+    );
+  }
+  function imageFromSupermarket(storePrices) {
+    // console.log("Inside function ",storePrices.carrefour.productImageLink);
+    return storePrices.carrefour.productImageLink;
+  }
   // console.log("The cart Items form Cart Page ",cart);
   const calculateTotal = (market) => {
-    return cart.reduce(
-      (total, item) =>
-        total + item.quantity * parseFloat(item.price[market] || 0),
-      0
-    );
+    
+   const total= cart.reduce((sum,item)=>{
+    if(item.stores[market]){
+      return sum + (item.stores[market].price * item.quantity);
+
+    }
+    return sum
+   },0);
+   return parseFloat(total.toFixed(4));
   };
 
   const handleItemPress = () => {
@@ -52,22 +68,19 @@ const Cart = () => {
       // Find the item in the cart
       const index = prevCart.findIndex((el) => el.id === item.id);
 
-      // Check if the item is found and handle accordingly
       if (index !== -1) {
         const newCart = [...prevCart];
         const currentItem = newCart[index];
 
         if (currentItem.quantity > 1) {
-          // If quantity is more than one, decrement it
           newCart[index] = {
             ...currentItem,
             quantity: currentItem.quantity - 1,
           };
-          decreaseCart(1); // Decrement the cart count by 1
+          decreaseCart(1);
         } else {
-          // If quantity is 1, remove the item from the cart
           newCart.splice(index, 1);
-          decreaseCart(1); // Decrement the cart count by 1
+          decreaseCart(1);
         }
 
         return newCart;
@@ -87,13 +100,13 @@ const Cart = () => {
         >
           <Image
             source={{
-              uri: item.imageSource || "https://via.placeholder.com/100",
+              uri:   item.stores.carrefour.productImageLink || "https://via.placeholder.com/100",
             }}
             style={styles.itemImage}
           />
           <View className="flex-col px-2">
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text className="text-gray-400">{item.descreption}</Text>
+            <Text className="text-black-100 text-xs">{item.name}</Text>
+            {/* <Text className="text-gray-400 text-xs"></Text> */}
           </View>
           {item.isMeasuarble ? (
             <View>
@@ -119,12 +132,9 @@ const Cart = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => handleDeleteItem(item)}
-          >
-            <Icon name="close" size={24} color="red" />
-          </TouchableOpacity>
+          <View className="m-1.5">
+            <Text className="">{item.quantity}</Text>
+          </View>
 
           <TouchableOpacity
             onPress={() => {
@@ -138,10 +148,10 @@ const Cart = () => {
             />
           </TouchableOpacity>
         </View>
-        <Text className="text-500 p-2 text-xs">
+        {/* <Text className="text-500 p-2 text-xs">
           {" "}
           Quanitiy : {item.quantity}
-        </Text>
+        </Text> */}
       </View>
     </View>
   );
@@ -170,9 +180,7 @@ const Cart = () => {
 
           <View style={styles.marketComparison}>
             <View style={styles.marketContainer}>
-              <Text style={styles.marketPrice}>
-                {calculateTotal("Carrefour")} SR
-              </Text>
+              <Text style={styles.marketPrice}>{calculateTotal("tamimi")} SR</Text>
               <Image
                 source={{
                   uri: "https://cdn.wowdeals.me/uploads/images/companies/85/logo/330x150/1552857294.png",
@@ -181,12 +189,19 @@ const Cart = () => {
               />
             </View>
             <View style={styles.marketContainer}>
-              <Text style={styles.marketPrice}>
-                {calculateTotal("Tamimi")} SR
-              </Text>
+              <Text style={styles.marketPrice}>{calculateTotal("carrefour")} SR</Text>
               <Image
                 source={{
                   uri: "https://streetkitchen.co/wp-content/uploads/2020/06/carrefour-logo-1-1.png",
+                }}
+                style={styles.marketLogo}
+              />
+            </View>
+            <View style={styles.marketContainer}>
+              <Text style={styles.marketPrice}>{calculateTotal("danube")} SR</Text>
+              <Image
+                source={{
+                  uri: "https://iconape.com/wp-content/files/zq/369732/png/369732.png",
                 }}
                 style={styles.marketLogo}
               />
