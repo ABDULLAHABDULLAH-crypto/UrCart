@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { db } from "../firebaseConfig";
@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore"; // Added arrayUnion for cart
 import { useGlobalContext } from "../Context/GlobalContext";
 import { ProductData } from "../Data/ProductData";
+import CustomAlert from "./CustomAlert";
 const Product = ({ name, price, descreption, image,quantity }) => {
   const { userId } = useGlobalContext(); // Access userId from context
   const { cart, cartCount, increaseCart, addItemToCart } = useGlobalContext();
@@ -24,12 +25,17 @@ const Product = ({ name, price, descreption, image,quantity }) => {
     image: image,
     quantity:quantity
   };
-
+  const [alertVisible, setAlertVisible] = useState(false);
   // Add product to user's cart in Firestore
   const AddProduct = async () => {
     try {
       if (!userId) {
-        console.error("User ID is not available. Ensure user is signed in.");
+
+        <CustomAlert
+        visible={alertVisible}
+        message="This is a NativeWind styled alert!"
+        onClose={() => setAlertVisible(false)}
+      />
         return;
       }
 
@@ -72,7 +78,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
   };
   return (
     <View
-      className={`flex-1 w-full overflow-hidden ml-2  border border-slate-400 rounded-md items-center shadow-white`}
+      className={`flex-1 w-[150px] overflow-hidden ml-2   border border-slate-400 rounded-md items-center shadow-white bg-white`}
     >
       {/* Product Image Section */}
       <View className={`h-28 w-full relative`}>
@@ -105,7 +111,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
       
       <TouchableOpacity onPress={AddProduct}>
         <View
-          className={`bg-primary m-4 border-2 border-primary flex-row rounded-xl shadow-sm h-10 w-24 items-center justify-center`}
+          className={`bg-primary m-5 border-2 border-primary flex-row rounded-xl shadow-sm h-10 w-24 items-center justify-center`}
         >
           <Text className="text-white text-xs">Add to Cart</Text>
         </View>

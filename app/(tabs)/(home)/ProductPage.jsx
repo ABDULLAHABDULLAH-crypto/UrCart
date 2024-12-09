@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { useGlobalContext } from "../../../Context/GlobalContext";
+import ImagePopup from "../../../components/ImagePopUp";
 
 const Product = () => {
   const { name, price, descreption, imageSource } = useLocalSearchParams();
@@ -45,15 +46,23 @@ const Product = () => {
   const incQuantity = () => setQuantity((prev) => prev + 1);
 
   const decQuantity = () => setQuantity((prev) => Math.max(prev - 1, 1)); // Prevent quantity from going below 1
-
+   const [fullimage,setFullImage]=useState(false);
   return (
-    <View className="flex px-6">
-      <View>
+    <View className="flex px-6 pt-6 bg-white h-full">
+      <View className="h-1/2">
+        <TouchableOpacity onPress={()=>setFullImage(true)}>
         <Image
           source={{ uri: imageSource }}
           resizeMode="cover"
-          className="w-96 h-96"
+          className="w-full h-[100%]"
         />
+        <ImagePopup
+        visible={fullimage}
+        imageUrl={imageSource}
+        onClose={()=>{setFullImage(false)}}
+        />
+        </TouchableOpacity>
+       
       </View>
       <View className="p-5">
         <Text className="text-3xl text-slate-500">{name}</Text>
