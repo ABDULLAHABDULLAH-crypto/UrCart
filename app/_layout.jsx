@@ -57,7 +57,7 @@ export default function RootLayout() {
     // We will use Global Context to fetch user data
   return (
     <GlobalProvider>
-    <Stack className="bg-slate-100">
+    <Stack className="bg-white">
     <Stack.Screen  name="index" options={{headerShown:false}}/>
     <Stack.Screen name="(tabs)" options={{headerShown:false}}/>
     <Stack.Screen name="(auth)" options={{headerShown:false}}/>

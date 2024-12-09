@@ -31,11 +31,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
     try {
       if (!userId) {
 
-        <CustomAlert
-        visible={alertVisible}
-        message="This is a NativeWind styled alert!"
-        onClose={() => setAlertVisible(false)}
-      />
+        Alert.alert("Please SignIn");
         return;
       }
 
@@ -78,25 +74,25 @@ const Product = ({ name, price, descreption, image,quantity }) => {
   };
   return (
     <View
-      className={`flex-1 w-[150px] overflow-hidden ml-2   border border-slate-400 rounded-md items-center shadow-white bg-white`}
+      className={`flex-1 w-[150px] overflow-hidden ml-2 flex-col  border border-slate-400 rounded-md items-center shadow-white bg-white`}
     >
       {/* Product Image Section */}
-      <View className={`h-28 w-full relative`}>
+      <View className={`h-28 w-full relative flex-1`}>
         {/* Background Decoration */}
         <View className={`absolute top-0 left-0 h-24 w-24 rounded-lg`} />
 
         {/* Product Icon */}
         <TouchableOpacity onPress={handleClickForProduct}>
           <Image
-            className={`w-[80%] h-20 mx-4`}
-            resizeMode="cover"
+            className={`w-[80%] h-full mx-4 `}
+            resizeMode="contain"
             source={{ uri: image }}
           />
         </TouchableOpacity>
       </View>
 
       {/* Product Description */}
-      <View className={`m-2 gap-2`}>
+      <View className={`m-2 gap-2 flex-2`}>
         <Text className="text-[#262626] font-light text-[11px] text-left w-25">
           {name}
         </Text>
@@ -111,7 +107,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
       
       <TouchableOpacity onPress={AddProduct}>
         <View
-          className={`bg-primary m-5 border-2 border-primary flex-row rounded-xl shadow-sm h-10 w-24 items-center justify-center`}
+          className={`bg-primary m-5 border-2 flex-3 border-primary flex-row rounded-xl shadow-sm h-10 w-24 items-center justify-center`}
         >
           <Text className="text-white text-xs">Add to Cart</Text>
         </View>

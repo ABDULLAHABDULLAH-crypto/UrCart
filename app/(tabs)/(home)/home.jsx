@@ -20,6 +20,23 @@ const Home = () => {
   const { cartCount,cart } = useGlobalContext();
   const [products, setProducts] = useState([]);
 
+  function getRandomeProduct(arr,num){
+    const RandomArray=arr.slice(0);
+
+    let i=arr.length;
+    let temp,index;
+
+    while(i--){
+
+      index = Math.floor(Math.random() * (i+1));
+      temp=RandomArray[i];
+      RandomArray[i]=RandomArray[index];
+      RandomArray[index]=temp;
+    }
+    
+    return RandomArray.slice(0,num);
+  }
+
   function findLowestPrice(storePrices) {
     // console.log("Inside function ",storePrices.carrefour.price);
     return Math.min(storePrices.carrefour.price,storePrices.danube.price,storePrices.tamimi.price);
@@ -67,9 +84,9 @@ const Home = () => {
   
   const renderLastSearched = () => (
     <View className="px-4">
-      <Text className="font-pregular my-5">Last Searched</Text>
+      <Text className="font-pregular my-5">Selected Products</Text>
       <FlatList
-        data={products}
+        data={getRandomeProduct(products,15)}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
