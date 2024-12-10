@@ -69,15 +69,14 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
         return contains(item, formatedQuery);
       });
       setProduct(filterData);
-    }
-    else{
+    } else {
       setShowOptions(false);
     }
   };
 
   const contains = (item, query) => {
     if (item.name.includes(query)) {
-      setShowOptions(true)
+      setShowOptions(true);
       return true;
     }
     // setShowOptions(false);
@@ -133,21 +132,22 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
           value={text}
           placeholderTextColor="gray"
           onChangeText={(e) => {
+            handleSearch(e);
             setQuerySearched(e);
-          }}
-          placeholder="Search..."
+          }} 
+          placeholder={placeholder || "Search..."}
           textAlign="left"
-          autoComplete="additional-name"
+      
           clearButtonMode="always"
-          autoCapitalize="none"
+          autoCapitalize="words"
           autoCorrect={false}
           color="gray"
-          onSubmitEditing={(e) => {
-            handleSearch(e);
+          onSubmitEditing={(event) => {
+            handleSearch(event.nativeEvent.text);
           }}
         />
       </View>
-      {showOptions ? (
+      {(showOptions) && (
         <View
           className="bg-white absolute top-[80%] w-full h-30 z-4 p-5 border-1 rounded-md"
           style={{ zIndex: 100 }}
@@ -165,6 +165,11 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
                       params: {
                         name: item.name,
                         price: findLowestPrice(item.stores),
+                        prices: [
+                          item.stores.carrefour.price,
+                          item.stores.danube.price,
+                          item.stores.tamimi.price,
+                        ],
                         description: item.descreption,
                         imageSource: imageFromSupermarket(item.stores),
                       },
@@ -175,17 +180,19 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
                 <View className="flex-row items-center align-middle  p-2">
                   <Image
                     source={{ uri: imageFromSupermarket(item.stores) }}
-                    className="w-10 h-10"
+                    className="w-12 h-12"
                     resizeMethod="cover"
                   />
-                  <Text className="text-center text-sm ">{item.name}</Text>
+                  
+                    <Text>{item.name}</Text>
+                  
                 </View>
               </TouchableOpacity>
             )}
           />
           )
         </View>
-      ) : null}
+      ) }
     </View>
   );
 };

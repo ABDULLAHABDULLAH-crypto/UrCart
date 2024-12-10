@@ -14,7 +14,9 @@ import {
 import { useGlobalContext } from "../Context/GlobalContext";
 import { ProductData } from "../Data/ProductData";
 import CustomAlert from "./CustomAlert";
-const Product = ({ name, price, descreption, image,quantity }) => {
+const Product = ({ name, price, descreption, image,quantity,prices }) => {
+  
+
   const { userId } = useGlobalContext(); // Access userId from context
   const { cart, cartCount, increaseCart, addItemToCart } = useGlobalContext();
   // Create a product object to be added
@@ -22,6 +24,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
     name: name,
     descreption: descreption,
     price: price,
+    prices:prices,
     image: image,
     quantity:quantity
   };
@@ -29,15 +32,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
   // Add product to user's cart in Firestore
   const AddProduct = async () => {
     try {
-      if (!userId) {
-
-        Alert.alert("Please SignIn");
-        return;
-      }
-
-      // Reference to the user's document based on userId
-      const userRef = doc(db, "users", userId);
-
+ 
       // Fetching the product based on its name
       const productsRef = collection(db, "Products2.0");
       const q = query(productsRef, where("name", "==", product.name));
@@ -61,6 +56,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
 
   
   const handleClickForProduct = () => {
+
     router.push({
       pathname: "ProductPage",
       params: {
@@ -68,6 +64,7 @@ const Product = ({ name, price, descreption, image,quantity }) => {
         price: price,
         description: descreption,
         imageSource: image,
+        prices:[prices.carrefour.price,prices.danube.price,prices.tamimi.price],
         quantity:quantity
       },
     });

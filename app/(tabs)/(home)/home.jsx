@@ -17,29 +17,34 @@ import { db } from "../../../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 
 const Home = () => {
-  const { cartCount,cart } = useGlobalContext();
+  const { cartCount, cart } = useGlobalContext();
   const [products, setProducts] = useState([]);
+  const [showCart, setShowCart] = useState(false);
 
-  function getRandomeProduct(arr,num){
-    const RandomArray=arr.slice(0);
 
-    let i=arr.length;
-    let temp,index;
+  function getRandomeProduct(arr, num) {
+    const RandomArray = arr.slice(0);
 
-    while(i--){
+    let i = arr.length;
+    let temp, index;
 
-      index = Math.floor(Math.random() * (i+1));
-      temp=RandomArray[i];
-      RandomArray[i]=RandomArray[index];
-      RandomArray[index]=temp;
+    while (i--) {
+      index = Math.floor(Math.random() * (i + 1));
+      temp = RandomArray[i];
+      RandomArray[i] = RandomArray[index];
+      RandomArray[index] = temp;
     }
-    
-    return RandomArray.slice(0,num);
+
+    return RandomArray.slice(0, num);
   }
 
   function findLowestPrice(storePrices) {
     // console.log("Inside function ",storePrices.carrefour.price);
-    return Math.min(storePrices.carrefour.price,storePrices.danube.price,storePrices.tamimi.price);
+    return Math.min(
+      storePrices.carrefour.price,
+      storePrices.danube.price,
+      storePrices.tamimi.price
+    );
   }
   function imageFromSupermarket(storePrices) {
     // console.log("Inside function ",storePrices.carrefour.price);
@@ -52,8 +57,7 @@ const Home = () => {
         const querySnapshot = await getDocs(collection(db, "Products2.0"));
         const productArray = [];
         querySnapshot.forEach((doc) => {
-          productArray.push({ ...doc.data(), id: doc.id, });
-          
+          productArray.push({ ...doc.data(), id: doc.id });
         });
 
         setProducts(productArray);
@@ -81,12 +85,12 @@ const Home = () => {
       </View>
     </>
   );
-  
+
   const renderLastSearched = () => (
     <View className="px-4">
       <Text className="font-pregular my-5">Selected Products</Text>
       <FlatList
-        data={getRandomeProduct(products,15)}
+        data={getRandomeProduct(products, 15)}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
@@ -95,8 +99,9 @@ const Home = () => {
             name={item.name}
             price={findLowestPrice(item.stores)}
             image={imageFromSupermarket(item.stores)}
+            prices={item.stores}
             description={item.description}
-            quantity={item.quantity??0}
+            quantity={item.quantity ?? 0}
           />
         )}
       />
@@ -152,9 +157,12 @@ const Home = () => {
     <SafeAreaView style={{ flex: 1, paddingTop: 0, marginTop: -70 }}>
       {/* <StatusBar /> */}
       {/* Search Bar */}
-      <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl">
+      <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl ">
         <SearchInput />
-        <TouchableOpacity onPress={{}} className="px-6">
+        <TouchableOpacity
+          onPress={() => setShowCart(!showCart)}
+          className="px-6"
+        >
           <Image
             source={require("../../../assets/images/ShoppingCart.png")}
             resizeMode="cover"
@@ -166,8 +174,39 @@ const Home = () => {
             </View>
           )}
         </TouchableOpacity>
+        {showCart ? (
+          <View
+            className="absolute top-[70%] right-[5%] h-72 w-full bg-white border-1 rounded-xl "
+            style={{ zIndex: 2000 }}
+          >
+            <FlatList
+              data={cart}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View className="flex flex-row border-b-2 border-gray-400 items-center justify-between p-3">
+                  <Image
+                    source={{ uri: imageFromSupermarket(item.stores) }}
+                    className={`w-10 h-10 mx-2  `}
+                    resizeMode="contain"
+                  />
+                  <Text>{item.name}</Text>
+                  <Text className="text-gray-400 text-xs">
+                    Quanitiy: {item.quantity}
+                  </Text>
+                </View>
+              )}
+            />
+         
+              <View className=" flex items-center p-2">
+                <TouchableOpacity onPress={() => {router.push("/cart");}} className="bg-primary h-10 flex items-center text-center bottom-0 rounded-lg"><Text className="text-white p-2">View Cart</Text></TouchableOpacity>
+                
+              </View>
+            
+          </View>
+        ) : (
+          ""
+        )}
       </View>
-
       <FlatList
         ListHeaderComponent={renderHeader}
         data={[{ key: "lastSearched" }, { key: "categories" }]}

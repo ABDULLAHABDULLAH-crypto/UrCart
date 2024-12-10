@@ -10,7 +10,7 @@ import { Image } from "react-native";
 
 const CategoryPage = () => {
   const { categoryName } = useLocalSearchParams();
-  console.log("Category Name ", categoryName);
+  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { cartCount,cart } = useGlobalContext();
@@ -59,9 +59,12 @@ const CategoryPage = () => {
       ) : (
         <View>
           <View>
-          <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl">
-        <SearchInput text={categoryName}/>
-        <TouchableOpacity onPress={{}} className="px-6">
+          <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl ">
+        <SearchInput />
+        <TouchableOpacity
+          onPress={() => setShowCart(!showCart)}
+          className="px-6"
+        >
           <Image
             source={require("../../../../assets/images/ShoppingCart.png")}
             resizeMode="cover"
@@ -73,6 +76,38 @@ const CategoryPage = () => {
             </View>
           )}
         </TouchableOpacity>
+        {showCart ? (
+          <View
+            className="absolute top-[70%] right-[5%] h-72 w-full bg-white border-1 rounded-xl "
+            style={{ zIndex: 2000 }}
+          >
+            <FlatList
+              data={cart}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View className="flex flex-row border-b-2 border-gray-400 items-center justify-between p-3">
+                  <Image
+                    source={{ uri: imageFromSupermarket(item.stores) }}
+                    className={`w-10 h-10 mx-2  `}
+                    resizeMode="contain"
+                  />
+                  <Text>{item.name}</Text>
+                  <Text className="text-gray-400 text-xs">
+                    Quanitiy: {item.quantity}
+                  </Text>
+                </View>
+              )}
+            />
+         
+              <View className=" flex items-center p-2">
+                <TouchableOpacity onPress={() => {router.push("/cart");}} className="bg-primary h-10 flex items-center text-center bottom-0 rounded-lg"><Text className="text-white p-2">View Cart</Text></TouchableOpacity>
+                
+              </View>
+            
+          </View>
+        ) : (
+          ""
+        )}
       </View>
           </View>
           <FlatList

@@ -7,7 +7,10 @@ import { useGlobalContext } from "../../../Context/GlobalContext";
 import ImagePopup from "../../../components/ImagePopUp";
 
 const Product = () => {
-  const { name, price, descreption, imageSource } = useLocalSearchParams();
+  const { name, price, descreption, imageSource, prices } =
+    useLocalSearchParams();
+  const NewItems = prices.split(",").map((item) => item.trim());
+
   const [quantity, setQuantity] = useState(1);
   const { userId, cart, increaseCart, removeItemFromCart, addItemToCart } =
     useGlobalContext();
@@ -15,7 +18,7 @@ const Product = () => {
   const AddProduct = async () => {
     try {
       if (!userId) {
-        console.error("User ID is not available. Ensure user is signed in.");
+        Alert.alert("Please SignIn");
         return;
       }
 
@@ -23,7 +26,7 @@ const Product = () => {
       const userRef = doc(db, "users", userId);
 
       // Fetching the product based on its name
-      const productsRef = collection(db, "Products");
+      const productsRef = collection(db, "Products2.0");
       const q = query(productsRef, where("name", "==", name));
       const querySnapshot = await getDocs(q);
       let productData = null; // Variable to store the complete product data
@@ -33,8 +36,7 @@ const Product = () => {
       });
 
       if (productData) {
-        console.log("Product data retrieved: ", productData);
-        console.log("Quantity From Product Page", quantity);
+        // console.log("Product data retrieved: ", productData);
         addItemToCart(productData, quantity); // Add the complete product data to the cart
       } else {
         console.log("No product found with name:", name);
@@ -46,35 +48,61 @@ const Product = () => {
   const incQuantity = () => setQuantity((prev) => prev + 1);
 
   const decQuantity = () => setQuantity((prev) => Math.max(prev - 1, 1)); // Prevent quantity from going below 1
-   const [fullimage,setFullImage]=useState(false);
+  const [fullimage, setFullImage] = useState(false);
   return (
-    <View className="flex px-6 pt-6 bg-white h-full">
+    <View className="p-6 bg-white h-full">
       <View className="h-1/2">
-        <TouchableOpacity onPress={()=>setFullImage(true)}>
-        <Image
-          source={{ uri: imageSource }}
-          resizeMode="cover"
-          className="w-full h-[100%]"
-        />
-        <ImagePopup
-        visible={fullimage}
-        imageUrl={imageSource}
-        onClose={()=>{setFullImage(false)}}
-        />
+        <TouchableOpacity onPress={() => setFullImage(true)}>
+          <Image
+            source={{ uri: imageSource }}
+            resizeMode="cover"
+            className="w-full h-[100%]"
+          />
+          <ImagePopup
+            visible={fullimage}
+            imageUrl={imageSource}
+            onClose={() => {
+              setFullImage(false);
+            }}
+          />
         </TouchableOpacity>
-       
       </View>
-      <View className="p-5">
+      <View className="p-2">
         <Text className="text-3xl text-slate-500">{name}</Text>
         <Text className="text-1xl text-slate-500 py-2"> {descreption}</Text>
       </View>
-      <View className="flex flex-row p-5 justify-between">
-        <Text className="text-3xl text-slate-500">Price Start From </Text>
-        <Text className="text-3xl text-green-600">SAR {price}</Text>
+      <View className="flex flex-row p-2 justify-between items-center">
+        <Image
+          source={{
+            uri: "https://streetkitchen.co/wp-content/uploads/2020/06/carrefour-logo-1-1.png",
+          }}
+          className="w-[80px] h-[50px] "
+          resizeMode="contain"
+        />
+        <Text>{NewItems[0]} SR</Text>
       </View>
-
+      <View className="flex flex-row p-2 justify-between items-center">
+        <Image
+          source={{
+            uri: "https://iconape.com/wp-content/files/zq/369732/png/369732.png",
+          }}
+          className="w-[80px] h-[50px] "
+          resizeMode="contain"
+        />
+        <Text>{NewItems[1]} SR</Text>
+      </View>
+      <View className="flex flex-row p-2 justify-between items-center">
+        <Image
+          source={{
+            uri: "https://cdn.wowdeals.me/uploads/images/companies/85/logo/330x150/1552857294.png",
+          }}
+          className="w-[80px] h-[50px] "
+          resizeMode="contain"
+        />
+        <Text>{NewItems[2]} SR</Text>
+      </View>
       <View>
-        <View className="flex justify-center items-center flex-row mt-8">
+        <View className="flex justify-center items-center flex-row ">
           <View className="flex flex-row border rounded-3xl justify-center w-48 p-3">
             <TouchableOpacity onPress={decQuantity}>
               <Image

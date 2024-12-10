@@ -30,10 +30,8 @@ const Cart = () => {
     );
   }
   function imageFromSupermarket(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.productImageLink);
     return storePrices.carrefour.productImageLink;
   }
-  // console.log("The cart Items form Cart Page ",cart);
   const calculateTotal = (market) => {
     
    const total= cart.reduce((sum,item)=>{
@@ -204,6 +202,9 @@ const Cart = () => {
                   uri: "https://iconape.com/wp-content/files/zq/369732/png/369732.png",
                 }}
                 style={styles.marketLogo}
+                className="w-[80px] h-[50px] "
+                resizeMode="contain"
+           
               />
             </View>
           </View>
