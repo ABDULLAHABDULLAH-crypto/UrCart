@@ -14,6 +14,7 @@ import {
 import { useGlobalContext } from "../Context/GlobalContext";
 import { ProductData } from "../Data/ProductData";
 import CustomAlert from "./CustomAlert";
+
 const Product = ({ name, price, descreption, image,quantity,prices }) => {
   
 
@@ -54,17 +55,23 @@ const Product = ({ name, price, descreption, image,quantity,prices }) => {
     }
   };
 
-  
-  const handleClickForProduct = () => {
+  function ProductPrices(storePrices){
+    const carrefourPrice = storePrices.carrefour ? storePrices.carrefour.price : Infinity;
+    const danubePrice = storePrices.danube ? storePrices.danube.price : Infinity;
+    const tamimiPrice = storePrices.tamimi ? storePrices.tamimi.price : Infinity;
+     
+    return [carrefourPrice ,danubePrice,tamimiPrice]
+  }
 
+  const handleClickForProduct = () => {
     router.push({
       pathname: "ProductPage",
       params: {
         name: name,
-        price: price,
+        price: price || 0,
         description: descreption,
         imageSource: image,
-        prices:[prices.carrefour.price,prices.danube.price,prices.tamimi.price],
+        prices:ProductPrices(prices),
         quantity:quantity
       },
     });

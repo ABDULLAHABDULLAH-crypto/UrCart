@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
 import Product from "../../../../components/Product"; // Ensure this path is correct
-import { useLocalSearchParams } from "expo-router"; // Verify this hook's usage or replace with another if not applicable
+import { router, useLocalSearchParams } from "expo-router"; // Verify this hook's usage or replace with another if not applicable
 import { db } from "../../../../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import SearchInput from "../../../../components/searchInput";
@@ -14,18 +14,32 @@ const CategoryPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { cartCount,cart } = useGlobalContext();
+  const [showCart, setShowCart] = useState(false);
 
   function findLowestPrice(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return Math.min(
-      storePrices.carrefour.price,
-      storePrices.danube.price,
-      storePrices.tamimi.price
-    );
+    // console.log("Inside function ", storePrices);
+
+    // Initialize prices, using Infinity as the default when a store is null
+    const carrefourPrice = storePrices.carrefour ? storePrices.carrefour.price : Infinity;
+    const danubePrice = storePrices.danube ? storePrices.danube.price : Infinity;
+    const tamimiPrice = storePrices.tamimi ? storePrices.tamimi.price : Infinity;
+  
+    // Return the minimum price, excluding any that are Infinity
+    return Math.min(carrefourPrice, danubePrice, tamimiPrice);
   }
   function imageFromSupermarket(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return storePrices.carrefour.productImageLink;
+
+      if(storePrices.carrefour != null){
+        return storePrices.carrefour.productImageLink; 
+      }
+      if(storePrices.danube != null){
+        return storePrices.danube.productImageLink; 
+      }
+      if(storePrices.tamimi != null){
+        return storePrices.tamimi.productImageLink; 
+      }
+
+    return "https://via.placeholder.com/100" ;
   }
 
   useEffect(() => {
@@ -59,6 +73,7 @@ const CategoryPage = () => {
       ) : (
         <View>
           <View>
+            {/* Search bar and cart */}
           <View className="flex-row items-center px-4 bg-primary border-1 rounded-bl-3xl rounded-br-3xl ">
         <SearchInput />
         <TouchableOpacity
@@ -121,6 +136,7 @@ const CategoryPage = () => {
                 <Product
                   price={findLowestPrice(item.stores)}
                   name={item.name}
+                  prices={item.stores}
                   description={item.description}
                   image={imageFromSupermarket(item.stores)}
                 />

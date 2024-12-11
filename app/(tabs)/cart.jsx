@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useGlobalContext } from "../../Context/GlobalContext";
 import { db } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { router } from "expo-router";
 
 const Cart = () => {
   const { cart, removeItemFromCart, addItemToCart, setCart, decreaseCart } =
@@ -22,29 +23,67 @@ const Cart = () => {
   const [animatedValue] = useState(new Animated.Value(1));
 
   function findLowestPrice(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return Math.min(
-      storePrices.carrefour.price,
-      storePrices.danube.price,
-      storePrices.tamimi.price
-    );
+    // console.log("Inside function ", storePrices);
+
+    // Initialize prices, using Infinity as the default when a store is null
+    const carrefourPrice = storePrices.carrefour
+      ? storePrices.carrefour.price
+      : Infinity;
+    const danubePrice = storePrices.danube
+      ? storePrices.danube.price
+      : Infinity;
+    const tamimiPrice = storePrices.tamimi
+      ? storePrices.tamimi.price
+      : Infinity;
+
+    // Return the minimum price, excluding any that are Infinity
+    return Math.min(carrefourPrice, danubePrice, tamimiPrice);
   }
   function imageFromSupermarket(storePrices) {
-    return storePrices.carrefour.productImageLink;
+    if (storePrices.carrefour != null) {
+      return storePrices.carrefour.productImageLink;
+    }
+    if (storePrices.danube != null) {
+      return storePrices.danube.productImageLink;
+    }
+    if (storePrices.tamimi != null) {
+      return storePrices.tamimi.productImageLink;
+    }
+
+    return "https://via.placeholder.com/100";
   }
   const calculateTotal = (market) => {
-    
-   const total= cart.reduce((sum,item)=>{
-    if(item.stores[market]){
-      return sum + (item.stores[market].price * item.quantity);
-
-    }
-    return sum
-   },0);
-   return parseFloat(total.toFixed(4));
+    const total = cart.reduce((sum, item) => {
+      if (item.stores[market]) {
+        return sum + item.stores[market].price * item.quantity;
+      }
+      return sum;
+    }, 0);
+    return parseFloat(total.toFixed(4));
   };
+  function ProductPrices(storePrices) {
+    const carrefourPrice = storePrices.carrefour
+      ? storePrices.carrefour.price
+      : Infinity;
+    const danubePrice = storePrices.danube
+      ? storePrices.danube.price
+      : Infinity;
+    const tamimiPrice = storePrices.tamimi
+      ? storePrices.tamimi.price
+      : Infinity;
 
-  const handleItemPress = () => {
+    return [carrefourPrice, danubePrice, tamimiPrice];
+  }
+  const handleItemPress = (item) => {
+    router.push({
+      pathname: "ProductPage",
+      params: {
+        name: item.name,
+        description: item.descreption,
+        imageSource: imageFromSupermarket(item.stores),
+        prices: ProductPrices(item.stores),
+      },
+    });
     Animated.sequence([
       Animated.timing(animatedValue, {
         toValue: 0.95,
@@ -89,7 +128,7 @@ const Cart = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <TouchableOpacity onPress={handleItemPress}>
+      <TouchableOpacity onPress={() => handleItemPress(item)}>
         <Animated.View
           style={[
             styles.itemDetails,
@@ -98,12 +137,14 @@ const Cart = () => {
         >
           <Image
             source={{
-              uri:   item.stores.carrefour.productImageLink || "https://via.placeholder.com/100",
+              uri:
+                imageFromSupermarket(item.stores) ||
+                "https://via.placeholder.com/100",
             }}
             style={styles.itemImage}
           />
           <View className="flex-col px-2">
-            <Text className="text-black-100 text-xs">{item.name}</Text>
+            <Text className="text-black-100 text-xs w-40">{item.name}</Text>
             {/* <Text className="text-gray-400 text-xs"></Text> */}
           </View>
           {item.isMeasuarble ? (
@@ -146,10 +187,6 @@ const Cart = () => {
             />
           </TouchableOpacity>
         </View>
-        {/* <Text className="text-500 p-2 text-xs">
-          {" "}
-          Quanitiy : {item.quantity}
-        </Text> */}
       </View>
     </View>
   );
@@ -178,33 +215,32 @@ const Cart = () => {
 
           <View style={styles.marketComparison}>
             <View style={styles.marketContainer}>
-              <Text style={styles.marketPrice}>{calculateTotal("tamimi")} SR</Text>
+              <Text style={styles.marketPrice}>
+                {calculateTotal("tamimi")} SR
+              </Text>
               <Image
-                source={{
-                  uri: "https://cdn.wowdeals.me/uploads/images/companies/85/logo/330x150/1552857294.png",
-                }}
+                source={require("../../assets/images/tamimi.png")}
                 style={styles.marketLogo}
               />
             </View>
             <View style={styles.marketContainer}>
-              <Text style={styles.marketPrice}>{calculateTotal("carrefour")} SR</Text>
+              <Text style={styles.marketPrice}>
+                {calculateTotal("carrefour")} SR
+              </Text>
               <Image
-                source={{
-                  uri: "https://streetkitchen.co/wp-content/uploads/2020/06/carrefour-logo-1-1.png",
-                }}
+                source={require("../../assets/images/carrefour.png")}
                 style={styles.marketLogo}
               />
             </View>
             <View style={styles.marketContainer}>
-              <Text style={styles.marketPrice}>{calculateTotal("danube")} SR</Text>
+              <Text style={styles.marketPrice}>
+                {calculateTotal("danube")} SR
+              </Text>
               <Image
-                source={{
-                  uri: "https://iconape.com/wp-content/files/zq/369732/png/369732.png",
-                }}
+                source={require("../../assets/images/danube.png")}
                 style={styles.marketLogo}
                 className="w-[80px] h-[50px] "
                 resizeMode="contain"
-           
               />
             </View>
           </View>

@@ -39,16 +39,29 @@ const Home = () => {
   }
 
   function findLowestPrice(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return Math.min(
-      storePrices.carrefour.price,
-      storePrices.danube.price,
-      storePrices.tamimi.price
-    );
+    // console.log("Inside function ", storePrices);
+
+    // Initialize prices, using Infinity as the default when a store is null
+    const carrefourPrice = storePrices.carrefour ? storePrices.carrefour.price : Infinity;
+    const danubePrice = storePrices.danube ? storePrices.danube.price : Infinity;
+    const tamimiPrice = storePrices.tamimi ? storePrices.tamimi.price : Infinity;
+  
+    // Return the minimum price, excluding any that are Infinity
+    return Math.min(carrefourPrice, danubePrice, tamimiPrice);
   }
   function imageFromSupermarket(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return storePrices.carrefour.productImageLink;
+
+      if(storePrices.carrefour != null){
+        return storePrices.carrefour.productImageLink; 
+      }
+      if(storePrices.danube != null){
+        return storePrices.danube.productImageLink; 
+      }
+      if(storePrices.tamimi != null){
+        return storePrices.tamimi.productImageLink; 
+      }
+
+    return "https://via.placeholder.com/100" ;
   }
 
   useEffect(() => {
@@ -67,7 +80,6 @@ const Home = () => {
     };
     fetchProducts();
   }, []);
-  // console.log(products)
   const renderHeader = () => (
     <>
       {/* Banner */}
@@ -114,25 +126,26 @@ const Home = () => {
       <FlatList
         data={[
           {
-            name: "Beverages & Water",
-            img: require("../../../assets/images/A glass of juice with different juices on a wooden table..png"),
+            name: "HairCare",
+            img: require("../../../assets/images/Bottles of shampoo and conditioner lie with towel and comb on wooden table .png"),
           },
           {
-            name: "Meets",
-            img: require("../../../assets/images/meats 1.png"),
+            name: "CannedFood",
+            img: require("../../../assets/images/Top view food packaged in cans  .png"),
           },
           {
             name: "Dairy",
-            img: require("../../../assets/images/Eggs.png"),
+            img: require("../../../assets/images/Milk products .png"),
           },
           {
-            name: "Fruit & Veg",
-            img: require("../../../assets/images/Vegetables with pepper inside a bowl (2).png"),
-          },
+            name: "Coffee",
+            img: require("../../../assets/images/Coffee beans .jpg"),
+          },  
           {
-            name: "Bakery",
-            img: require("../../../assets/images/bakery 1.png"),
+            name: "FrozenFood",
+            img: require("../../../assets/images/Flat lay arrangement of frozen food.png"),
           },
+          
         ]}
         numColumns={3}
         keyExtractor={(item, index) => index.toString()}
@@ -140,7 +153,7 @@ const Home = () => {
           <Category
             categoryName={item.name}
             imageSource={item.img}
-            className="w-1/2"
+            className="w-3/4"
             onPress={() =>
               router.push({
                 pathname: `/category/${item.name}`,
@@ -189,7 +202,7 @@ const Home = () => {
                     className={`w-10 h-10 mx-2  `}
                     resizeMode="contain"
                   />
-                  <Text>{item.name}</Text>
+                  <Text className="text-xs">{item.name}</Text>
                   <Text className="text-gray-400 text-xs">
                     Quanitiy: {item.quantity}
                   </Text>
@@ -198,7 +211,7 @@ const Home = () => {
             />
          
               <View className=" flex items-center p-2">
-                <TouchableOpacity onPress={() => {router.push("/cart");}} className="bg-primary h-10 flex items-center text-center bottom-0 rounded-lg"><Text className="text-white p-2">View Cart</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => {router.push("/cart");}} className="bg-primary h-10 w-40 flex items-center text-center bottom-0 rounded-lg"><Text className="text-white p-2">View Cart</Text></TouchableOpacity>
                 
               </View>
             

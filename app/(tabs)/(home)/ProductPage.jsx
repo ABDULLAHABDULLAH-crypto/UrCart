@@ -10,7 +10,6 @@ const Product = () => {
   const { name, price, descreption, imageSource, prices } =
     useLocalSearchParams();
   const NewItems = prices.split(",").map((item) => item.trim());
-
   const [quantity, setQuantity] = useState(1);
   const { userId, cart, increaseCart, removeItemFromCart, addItemToCart } =
     useGlobalContext();
@@ -68,38 +67,44 @@ const Product = () => {
         </TouchableOpacity>
       </View>
       <View className="p-2">
-        <Text className="text-3xl text-slate-500">{name}</Text>
+        <Text className="text-xl text-slate-500 ">{name}</Text>
         <Text className="text-1xl text-slate-500 py-2"> {descreption}</Text>
       </View>
       <View className="flex flex-row p-2 justify-between items-center">
         <Image
-          source={{
-            uri: "https://streetkitchen.co/wp-content/uploads/2020/06/carrefour-logo-1-1.png",
-          }}
+          source={require("../../../assets/images/carrefour.png")}
           className="w-[80px] h-[50px] "
           resizeMode="contain"
         />
-        <Text>{NewItems[0]} SR</Text>
+        {NewItems[0] != Infinity ? (
+          <Text>{NewItems[0]} SR</Text>
+        ) : (
+          <Text>Not Available</Text>
+        )}
       </View>
       <View className="flex flex-row p-2 justify-between items-center">
         <Image
-          source={{
-            uri: "https://iconape.com/wp-content/files/zq/369732/png/369732.png",
-          }}
+          source={require("../../../assets/images/danube.png")}
           className="w-[80px] h-[50px] "
           resizeMode="contain"
         />
-        <Text>{NewItems[1]} SR</Text>
+        {NewItems[1] != Infinity ? (
+          <Text>{NewItems[1]} SR</Text>
+        ) : (
+          <Text>Not Available</Text>
+        )}
       </View>
       <View className="flex flex-row p-2 justify-between items-center">
         <Image
-          source={{
-            uri: "https://cdn.wowdeals.me/uploads/images/companies/85/logo/330x150/1552857294.png",
-          }}
+          source={require("../../../assets/images/tamimi.png")}
           className="w-[80px] h-[50px] "
           resizeMode="contain"
         />
-        <Text>{NewItems[2]} SR</Text>
+        {NewItems[2] != Infinity ? (
+          <Text>{NewItems[2]} SR</Text>
+        ) : (
+          <Text>Not Available</Text>
+        )}
       </View>
       <View>
         <View className="flex justify-center items-center flex-row ">

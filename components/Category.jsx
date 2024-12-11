@@ -4,12 +4,12 @@ import { router } from "expo-router";
 
 const Category = ({ categoryName, imageSource, onPress }) => {
   return (
-    <View className=" w-24 items-center  mr-4 text-center rounded-lg m-3">
+    <View className=" w-24 items-center  mr-10 text-center rounded-lg m-3">
       {/* Category Image */}
       <TouchableOpacity onPress={()=>{
         router.push({pathname:`category/${categoryName}`,params:{categoryName:categoryName}})
       }}>
-        <View className="w-20 h-20  rounded-lg overflow-hidden bg-gradient-to-r from-[#e0f7fa] to-[#e1bee7] shadow-md">
+        <View className="w-28 h-28  rounded-lg overflow-hidden bg-gradient-to-r from-[#e0f7fa] to-[#e1bee7] shadow-md">
           <Image
             className="w-full h-full"
             resizeMode="cover"

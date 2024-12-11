@@ -73,6 +73,13 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
       setShowOptions(false);
     }
   };
+  function ProductPrices(storePrices){
+    const carrefourPrice = storePrices.carrefour ? storePrices.carrefour.price : Infinity;
+    const danubePrice = storePrices.danube ? storePrices.danube.price : Infinity;
+    const tamimiPrice = storePrices.tamimi ? storePrices.tamimi.price : Infinity;
+     
+    return [carrefourPrice ,danubePrice,tamimiPrice]
+  }
 
   const contains = (item, query) => {
     if (item.name.includes(query)) {
@@ -93,18 +100,35 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
       },
     });
   };
-  function imageFromSupermarket(storePrices) {
-    // console.log("Inside function ", storePrices.carrefour.productImageLink);
-    return storePrices.carrefour.productImageLink;
-  }
-
   function findLowestPrice(storePrices) {
-    // console.log("Inside function ",storePrices.carrefour.price);
-    return Math.min(
-      storePrices.carrefour.price,
-      storePrices.danube.price,
-      storePrices.tamimi.price
-    );
+    // console.log("Inside function ", storePrices);
+
+    // Initialize prices, using Infinity as the default when a store is null
+    const carrefourPrice = storePrices.carrefour
+      ? storePrices.carrefour.price
+      : Infinity;
+    const danubePrice = storePrices.danube
+      ? storePrices.danube.price
+      : Infinity;
+    const tamimiPrice = storePrices.tamimi
+      ? storePrices.tamimi.price
+      : Infinity;
+
+    // Return the minimum price, excluding any that are Infinity
+    return Math.min(carrefourPrice, danubePrice, tamimiPrice);
+  }
+  function imageFromSupermarket(storePrices) {
+    if (storePrices.carrefour != null) {
+      return storePrices.carrefour.productImageLink;
+    }
+    if (storePrices.danube != null) {
+      return storePrices.danube.productImageLink;
+    }
+    if (storePrices.tamimi != null) {
+      return storePrices.tamimi.productImageLink;
+    }
+
+    return "https://via.placeholder.com/100";
   }
   return (
     <View>
@@ -134,10 +158,9 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
           onChangeText={(e) => {
             handleSearch(e);
             setQuerySearched(e);
-          }} 
+          }}
           placeholder={placeholder || "Search..."}
           textAlign="left"
-      
           clearButtonMode="always"
           autoCapitalize="words"
           autoCorrect={false}
@@ -147,14 +170,14 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
           }}
         />
       </View>
-      {(showOptions) && (
+      {showOptions && (
         <View
           className="bg-white absolute top-[80%] w-full h-30 z-4 p-5 border-1 rounded-md"
           style={{ zIndex: 100 }}
         >
-          (
           <FlatList
             data={product}
+            
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -165,11 +188,7 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
                       params: {
                         name: item.name,
                         price: findLowestPrice(item.stores),
-                        prices: [
-                          item.stores.carrefour.price,
-                          item.stores.danube.price,
-                          item.stores.tamimi.price,
-                        ],
+                        prices: ProductPrices(item.stores),
                         description: item.descreption,
                         imageSource: imageFromSupermarket(item.stores),
                       },
@@ -183,16 +202,14 @@ const SearchInput = ({ text, placeholder, handleChangeText }) => {
                     className="w-12 h-12"
                     resizeMethod="cover"
                   />
-                  
-                    <Text>{item.name}</Text>
-                  
+
+                  <Text>{item.name}</Text>
                 </View>
               </TouchableOpacity>
             )}
           />
-          )
         </View>
-      ) }
+      )}
     </View>
   );
 };
